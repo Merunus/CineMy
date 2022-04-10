@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Movie App</title>
+  </head>
+  <body>
+
+    <div class="wrapper">
+      <header>
+        <a href = "" class = "title">Cine<span class = "title-icon"><i class="fa-solid fa-film"></i></span><span class = "title-second-part">My</span></a>
+        <form id="form">
+          <input autocomplete="off" type="text" id="search" class="search" placeholder="Search">
+        </form>
+      </header>
+  
+      <h1 class = "genres-title">Sort by <span class = "genres-title-span">genres</span></h1>
+      <div class="tags" id = "tags">
+        <div class="tag">Action</div>
+        <div class="tag">Adventure</div>
+        <div class="tag">Thriller</div>
+        <div class="tag">Drama</div>
+      </div>
+      <hr class = "hr">
+  
+  
+  
+  
+      <div id="myNav" class="overlay">
+  
+        <!-- Button to close the overlay navigation -->
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      
+        <!-- Overlay content -->
+        <div class="overlay-content" id = "overlay-content"></div>
+        <a href="javascript:void(0)" class="arrow left-arrow" id = "left-arrow">&#8656;</a>
+        <a href="javascript:void(0)" class="arrow right-arrow"  id = "right-arrow" >&#8658;</a>
+      </div>
+      
+      <main id="main"></main>
+  
+      
+      <a  href = '#' class = "to-top"><i class="fa-solid fa-angle-up"></i></a>
+  
+  
+  
+      <div class="pagination">
+        <div id = "prev" class="page disabled-page">Previous Page</div>
+        <div id="current" class="current">1</div>
+        <div id = "next" class="page">Next Page</div>
+      </div>
+  
+    
+  
+  
+      <footer>
+        <div class="footer-container">
+          <p>© 2022 ООО «CineMy» <br>
+            HBO ® and related service marks are the property of Home Box Office, Inc</p>
+            <ul>
+              <li><a href=""><i class="fa-brands fa-facebook-f"></i></a></li>
+              <li><a href=""><i class="fa-brands fa-instagram"></i></a></li>
+              <li><a href=""><i class="fa-brands fa-twitter"></i></a></li>
+              <li><a href=""><i class="fa-brands fa-telegram"></i></a></li>
+              <li><a href=""><i class="fa-brands fa-linkedin-in"></i></a></li>
+            </ul>
+        </div>
+      </footer>
+    </div>
+    
+
+
+
+    <script src="https://kit.fontawesome.com/0b0db4d2c6.js" crossorigin="anonymous"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

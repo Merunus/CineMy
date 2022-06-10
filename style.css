@@ -2,10 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 
 
-/* :root {
-  --primary-color: #22254b;
-  --secondary-color: #373b69;
-} */
 
 :root {
   --rate:#22254b;
@@ -340,6 +336,13 @@ footer {
 .page {
   padding: 20px;
   cursor: pointer;
+  border: none;
+  font-weight: 500;
+  font-size: 1em;
+  font-family: inherit;
+}
+.page:active {
+  transform: scale(0.95);
 }
 
 .disabled-page {
@@ -473,6 +476,16 @@ footer {
 
 /* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
 @media(max-width:500px) {
+  
+  header {
+    flex-direction: column;
+  }
+  header a {
+    margin-bottom: 0.5em;
+  }
+  .footer-container {
+    flex-direction: column;
+  }
   .overlay-content {
     text-align: left;
     
@@ -494,12 +507,12 @@ iframe {
   text-align: center;
 }
 .arrow.left-arrow {
-  top: 65%;
+  top: 80%;
   left: 25%;
 }
 .arrow.right-arrow {
   left: 60%;
-  top: 65%;
+  top: 80%;
 }
 .footer-container p {
   font-size: 10px;

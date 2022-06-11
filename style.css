@@ -185,6 +185,10 @@ transform: translateY(0);
   overflow-y: auto;
   transition: transform 0.3s ease-in;
 }
+.overview::-webkit-scrollbar{
+  width: 8px;
+  background-color: grey;
+}
 
 .movie:hover .overview {
   transform: translateY(0);
@@ -476,6 +480,7 @@ footer {
 
 /* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
 @media(max-width:500px) {
+  
   header {
     flex-direction: column;
   }

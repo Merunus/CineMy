@@ -1,22 +1,22 @@
+
 const BASE_URL = "https://api.themoviedb.org/3"
-const API_URL = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=16d88adebf2cbd3eb12ae86a69e43fc4&page=1'
+const API_URL = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=16d88adebf2cbd3eb12ae86a69e43fc4'
 const IMG_PATH = 'https://image.tmdb.org/t/p/w1280'
 const SEARCH_API = 'https://api.themoviedb.org/3/search/movie?api_key=16d88adebf2cbd3eb12ae86a69e43fc4&query="'
 const API_KEY = "api_key=16d88adebf2cbd3eb12ae86a69e43fc4"
 
-
-const nextPage = document.getElementById("next")
+const closeBtn = document.getElementById("closebtn")
+const nextBtn = document.getElementById("next")
+const prevBtn = document.getElementById("prev")
+const currentPageContainer = document.getElementById("current")
+var currentPage = 1
+var totalPages = 1
 const tagsEl = document.getElementById("tags")
+const tagsTitle = document.getElementById("tags-title")
 const main = document.getElementById('main')
 const form = document.getElementById('form')
 const search = document.getElementById('search')
 const genres = [{ "id": 28, "name": "Action" }, { "id": 12, "name": "Adventure" }, { "id": 16, "name": "Animation" }, { "id": 35, "name": "Comedy" }, { "id": 80, "name": "Crime" }, { "id": 99, "name": "Documentary" }, { "id": 18, "name": "Drama" }, { "id": 10751, "name": "Family" }, { "id": 14, "name": "Fantasy" }, { "id": 36, "name": "History" }, { "id": 27, "name": "Horror" }, { "id": 10402, "name": "Music" }, { "id": 9648, "name": "Mystery" }, { "id": 10749, "name": "Romance" }, { "id": 878, "name": "Science Fiction" }, { "id": 10770, "name": "TV Movie" }, { "id": 53, "name": "Thriller" }, { "id": 10752, "name": "War" }, { "id": 37, "name": "Western" }];
-
-
-
-
-
-
 
 
 //Function for genres 
@@ -43,7 +43,6 @@ function getGenres() {
                     selectedGenre.push(genre.id)
                 }
             }
-            // console.log(selectedGenre);
             getMovies(API_URL + "&with_genres=" + encodeURI(selectedGenre.join(',')))
             clickedGenre();
         })
@@ -52,8 +51,7 @@ function getGenres() {
 }
 
 // Picked genres array
-
-function clickedGenre() {
+const clickedGenre = () => {
     const tags = document.querySelectorAll(".tag")
     tags.forEach(function (tag) {
         tag.classList.remove("selected")
@@ -71,10 +69,8 @@ function clickedGenre() {
 
 }
 
-
 // Clear buttoon delete
-
-function deleteClearBtn() {
+const deleteClearBtn = () => {
     if (selectedGenre.length == 0) {
         clear.classList.remove("tag", "clearBtn", "fa-solid", "fa-xmark")
     }
@@ -83,11 +79,8 @@ function deleteClearBtn() {
 
     }
 }
-
-
 // Clear button
-
-function clearBtn() {
+const clearBtn = () => {
     let clearBtn = document.getElementById("clear")
 
     if (clearBtn) {
@@ -113,16 +106,15 @@ function clearBtn() {
 
 
 // Get initial movies
-getMovies(API_URL)
-
-async function getMovies(url) {
+getMovies(API_URL, currentPage)
+async function getMovies(url, page) {
     // lastUrl = url;
-    const res = await fetch(url)
+    const res = await fetch(url + `&page=${page}`)
     const data = await res.json()
     if (data.results.length !== 0) {
         showMovies(data.results)
         console.log(data);
-
+        totalPages = data.total_pages
         // currentPage = data.page;
         // nextPage = currentPage + 1;
         // prevPage = currentPage - 1;
@@ -136,19 +128,21 @@ async function getMovies(url) {
         document.querySelector(".pagination").classList.add("invisible")
     }
 
-   
+    console.log(data)
 
 
 
 }
 
+
+
 // Show movies on page
-function showMovies(movies) {
+const showMovies = (movies) => {
     main.innerHTML = ''
 
     movies.forEach((movie) => {
         const { title, poster_path, vote_average, overview, genre_ids, release_date, id } = movie
-        let str = release_date.slice(0,4)
+        let str = release_date.slice(0, 4)
         const movieEl = document.createElement('div')
         movieEl.classList.add('movie')
         movieEl.innerHTML = `
@@ -168,7 +162,7 @@ function showMovies(movies) {
         `
         main.appendChild(movieEl)
 
-        
+
 
         document.getElementById(id).addEventListener("click", function () {
             openNav(movie)
@@ -178,7 +172,7 @@ function showMovies(movies) {
 
 // Get genres in film info
 
-function getGenresForInfo(genresAll, genresId) {
+const getGenresForInfo = (genresAll, genresId) => {
     const genres = [];
     // console.log(genresAll);
     // console.log(genresId);
@@ -189,7 +183,6 @@ function getGenresForInfo(genresAll, genresId) {
                 break
             }
         }
-
     }
     if (genres.length > 2) {
         genres.length = 2
@@ -199,13 +192,13 @@ function getGenresForInfo(genresAll, genresId) {
 }
 
 // Get the id of genres 
-function getGenre(id) {
+const getGenre = (id) => {
     if (id == genres.id) {
         return genres.name
     }
 }
 
-function getClassByRate(vote) {
+const getClassByRate = (vote) => {
     if (vote >= 8) {
         return 'green'
     } else if (vote >= 5) {
@@ -215,6 +208,7 @@ function getClassByRate(vote) {
     }
 }
 
+
 form.addEventListener('submit', (e) => {
     e.preventDefault()
     selectedGenre = []
@@ -223,7 +217,11 @@ form.addEventListener('submit', (e) => {
 
     if (searchTerm && searchTerm !== '') {
         getMovies(SEARCH_API + searchTerm)
-        search.value = ''
+        // search.value = ''
+        currentPage = 1;
+        currentPageContainer.textContent = currentPage
+        tagsEl.style.display = "none"
+        tagsTitle.style.display = "none"
     } else {
         window.location.reload()
     }
@@ -245,7 +243,7 @@ const overlayContent = document.getElementById("overlay-content")
 /* Open when someone clicks on the span element */
 function openNav(movie) {
     let id = movie.id
-    fetch(BASE_URL + "/movie/" +id+ "/videos?" + API_KEY).then(res => res.json()).then(videoData => {
+    fetch(BASE_URL + "/movie/" + id + "/videos?" + API_KEY).then(res => res.json()).then(videoData => {
         console.log(videoData);
         if (videoData) {
             document.getElementById("myNav").style.width = "100%";
@@ -253,28 +251,25 @@ function openNav(movie) {
                 var embed = [];
                 var dotsUnderVideos = []
                 videoData.results.forEach((video, idx) => {
-                    let {name, key, site } = video
-                        embed.push(`
+                    let { name, key, site } = video
+                    embed.push(`
                         <iframe width="560" height="315" src="https://www.youtube.com/embed/${key}" title="${name}" class="embed hide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
                      `)
-                     dotsUnderVideos.push(`
+                    dotsUnderVideos.push(`
                      <span class = "dot">${idx + 1}</span>
                      `)
-                     if(dotsUnderVideos.length > 5) {
-                         dotsUnderVideos.length = 5
-                     }
+                    if (dotsUnderVideos.length > 5) {
+                        dotsUnderVideos.length = 5
+                    }
 
 
-                     if(embed.length > 4) {
+                    if (embed.length > 4) {
                         embed.length = 5
-                     }
-                     
-                    
-                        
-                  
+                    }
+
                 })
-               var content = `
+                var content = `
                <h1 style = "color: white; opacity: 0.7; letter-spacing: 2px;text-transform: uppercase;">${movie.original_title}</h1>
                <br>
                 ${embed.join("")}
@@ -289,65 +284,94 @@ function openNav(movie) {
                 overlayContent.innerHTML = `<h1 style = "color: #fff;">No Results Found</h1>`
             }
 
-         }
-    })
-    }   
-
-    // Show videos
-    var activeSlide = 0;
-    var totalVideos = 0;
-    function showVideos() {
-        let embedClasses = document.querySelectorAll(".embed");
-        let dots = document.querySelectorAll(".dot");
-
-        totalVideos = embedClasses.length
-        embedClasses.forEach((emberTag, idx) => {
-            if(activeSlide == idx){
-                emberTag.classList.add("show")
-                emberTag.classList.remove("hide")
-            }else {
-                emberTag.classList.add("hide")
-                emberTag.classList.remove("show")
-            }
-        });
-        dots.forEach((dot, idx) => {
-            if(activeSlide == idx){
-                dot.classList.add("active")
-            }
-            else {
-                dot.classList.remove("active")
-            }
-        })
-    }
-
-    const leftArrow = document.getElementById("left-arrow")
-    const rightArrow = document.getElementById("right-arrow")
-
-    leftArrow.addEventListener("click", () => {
-        if(activeSlide > 0 ) {
-            activeSlide--
-        }else {
-            activeSlide = totalVideos - 1
         }
-        showVideos()
     })
-    rightArrow.addEventListener("click", () => {
-        if(activeSlide < (totalVideos - 1) ) {
-            activeSlide++
-        }else {
-            activeSlide = 0;
+}
+
+// Show videos
+var activeSlide = 0;
+var totalVideos = 0;
+function showVideos() {
+    let embedClasses = document.querySelectorAll(".embed");
+    let dots = document.querySelectorAll(".dot");
+
+    totalVideos = embedClasses.length
+    embedClasses.forEach((emberTag, idx) => {
+        if (activeSlide == idx) {
+            emberTag.classList.add("show")
+            emberTag.classList.remove("hide")
+        } else {
+            emberTag.classList.add("hide")
+            emberTag.classList.remove("show")
         }
-        showVideos()
+    });
+    dots.forEach((dot, idx) => {
+        if (activeSlide == idx) {
+            dot.classList.add("active")
+        }
+        else {
+            dot.classList.remove("active")
+        }
     })
+}
 
-    /* Close when someone clicks on the "x" symbol inside the overlay */
-    function closeNav() {
+const leftArrow = document.getElementById("left-arrow")
+const rightArrow = document.getElementById("right-arrow")
 
-        document.getElementById("myNav").style.width = "0%";
-        const iframes = document.getElementsByTagName('iframe');
-        if (iframes !== null) {
-      for (let i = 0; i < iframes.length; i++) {
-        iframes[i].src = iframes[i].src; //causes a reload so it stops playing, music, video, etc.
-      }
+leftArrow.addEventListener("click", () => {
+    if (activeSlide > 0) {
+        activeSlide--
+    } else {
+        activeSlide = totalVideos - 1
     }
+    showVideos()
+})
+rightArrow.addEventListener("click", () => {
+    if (activeSlide < (totalVideos - 1)) {
+        activeSlide++
+    } else {
+        activeSlide = 0;
     }
+    showVideos()
+})
+
+/* Close when someone clicks on the "x" symbol inside the overlay */
+function closeNav() {
+    document.getElementById("myNav").style.width = "0%";
+    const iframes = document.getElementsByTagName('iframe');
+    if (iframes !== null) {
+        for (let i = 0; i < iframes.length; i++) {
+            iframes[i].src = iframes[i].src; //causes a reload so it stops playing, music, video, etc.
+        }
+    }
+}
+closeBtn.addEventListener("click", closeNav)
+
+
+// Pagination 
+const togglePrevPage = () => {
+    if (currentPage === 1) {
+        prevBtn.setAttribute("disabled", "")
+    }
+    else {
+        currentPage = currentPage - 1
+        getMovies(API_URL, currentPage)
+        currentPageContainer.textContent = `${currentPage}`
+    }
+
+
+}
+const toggleNextPage = () => {
+    if (search.value) {
+        getMovies((SEARCH_API + search.value), currentPage + 1)
+        currentPage = currentPage + 1
+
+    } else {
+        getMovies(API_URL, currentPage + 1)
+        currentPage = currentPage + 1
+    }
+    prevBtn.removeAttribute("disabled")
+    currentPageContainer.textContent = `${currentPage}`
+}
+prevBtn.addEventListener("click", togglePrevPage)
+nextBtn.addEventListener("click", toggleNextPage)

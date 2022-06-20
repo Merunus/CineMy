@@ -1,10 +1,15 @@
-
 const BASE_URL = "https://api.themoviedb.org/3"
 const API_URL = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=16d88adebf2cbd3eb12ae86a69e43fc4'
 const IMG_PATH = 'https://image.tmdb.org/t/p/w1280'
 const SEARCH_API = 'https://api.themoviedb.org/3/search/movie?api_key=16d88adebf2cbd3eb12ae86a69e43fc4&query="'
 const API_KEY = "api_key=16d88adebf2cbd3eb12ae86a69e43fc4"
 
+var currentData = []
+const favoriteFilms = []
+
+const homeLink = document.querySelector(".home-link-btn")
+const favoriteLink = document.querySelector(".favorites-link-btn")
+const hr = document.getElementById("hr")
 const closeBtn = document.getElementById("closebtn")
 const nextBtn = document.getElementById("next")
 const prevBtn = document.getElementById("prev")
@@ -13,10 +18,17 @@ var currentPage = 1
 var totalPages = 1
 const tagsEl = document.getElementById("tags")
 const tagsTitle = document.getElementById("tags-title")
+const paginationContainer = document.querySelector(".pagination")
 const main = document.getElementById('main')
+const sectionFavorite = document.getElementById("section")
 const form = document.getElementById('form')
 const search = document.getElementById('search')
 const genres = [{ "id": 28, "name": "Action" }, { "id": 12, "name": "Adventure" }, { "id": 16, "name": "Animation" }, { "id": 35, "name": "Comedy" }, { "id": 80, "name": "Crime" }, { "id": 99, "name": "Documentary" }, { "id": 18, "name": "Drama" }, { "id": 10751, "name": "Family" }, { "id": 14, "name": "Fantasy" }, { "id": 36, "name": "History" }, { "id": 27, "name": "Horror" }, { "id": 10402, "name": "Music" }, { "id": 9648, "name": "Mystery" }, { "id": 10749, "name": "Romance" }, { "id": 878, "name": "Science Fiction" }, { "id": 10770, "name": "TV Movie" }, { "id": 53, "name": "Thriller" }, { "id": 10752, "name": "War" }, { "id": 37, "name": "Western" }];
+
+// For modal
+const modalContainer = document.getElementById("modal-container")
+const modalCloseBtn = document.getElementById("modal-close-btn")
+
 
 
 //Function for genres 
@@ -113,13 +125,10 @@ async function getMovies(url, page) {
     const data = await res.json()
     if (data.results.length !== 0) {
         showMovies(data.results)
-        console.log(data);
+        // console.log(data);
         totalPages = data.total_pages
-        // currentPage = data.page;
-        // nextPage = currentPage + 1;
-        // prevPage = currentPage - 1;
-        // totalPages = data.total_pages;
-
+        currentData = [...data.results]
+        console.log(currentData);
         document.querySelector("footer").classList.remove("invisible")
         document.querySelector(".pagination").classList.remove("invisible")
     } else {
@@ -128,12 +137,7 @@ async function getMovies(url, page) {
         document.querySelector(".pagination").classList.add("invisible")
     }
 
-    console.log(data)
-
-
-
 }
-
 
 
 // Show movies on page
@@ -142,14 +146,17 @@ const showMovies = (movies) => {
 
     movies.forEach((movie) => {
         const { title, poster_path, vote_average, overview, genre_ids, release_date, id } = movie
-        let str = release_date.slice(0, 4)
+        if(release_date) {
+            var str = release_date.slice(0, 4)
+        }
         const movieEl = document.createElement('div')
+        movieEl.setAttribute("id", id)
         movieEl.classList.add('movie')
         movieEl.innerHTML = `
             <img src="${poster_path ? IMG_PATH + poster_path : "https://cinemaone.net/images/movie_placeholder.png"}" alt="${title}">
             <div class="movie-info">
           <h3>${title}</h3>
-            <p class = "genres-film">${getGenresForInfo(genres, genre_ids)} | ${str} </p>
+            <p class = "genres-film">${getGenresForInfo(genres, genre_ids).splice(0, 2)} | ${str} </p>
           <span class="${getClassByRate(vote_average)}">${vote_average}</span>
             </div>
             <div class="overview">
@@ -157,18 +164,152 @@ const showMovies = (movies) => {
           
           ${overview}
           <br>
-          <button class = "trailer-btn" id = ${id}>Watch Trailers</button>
-        </div>
+          <div class = "movie-buttons-container">
+            <button name = "details" class = "trailer-btn" id = ${id}>More information</button>
+          </div>
+          </div>
         `
         main.appendChild(movieEl)
 
-
-
-        document.getElementById(id).addEventListener("click", function () {
-            openNav(movie)
-        })
+        // document.getElementById(id).addEventListener("click", function () {
+        //     openNav(movie)
+        // })
+        // trailerBtn.addEventListener("click", ()=>{
+        //     openNav(movie)
+        // })
     })
 }
+
+
+
+/////////////// <> 
+///////////////  Single Movie
+/////////////// <>
+
+
+
+const modalTitle = document.getElementById("modal-title");
+const modalImage = document.getElementById("modal-image");
+const voteSpan = document.querySelector(".modal-details-item-span-vote");
+const votesSpan = document.querySelector(".modal-details-item-span-votes");
+const popularitySpan = document.querySelector(".modal-details-item-span-popularity");
+const originalTitleSpan = document.querySelector(".modal-details-item-span-original-title");
+const releaseDateSpan = document.querySelector(".modal-details-item-span-release-date");
+const originalLanguageSpan = document.querySelector(".modal-details-item-span-original-language");
+const overviewModal = document.getElementById("modal-about")
+const genresModal = document.querySelector(".modal-genres-span-one")
+const trailerModalBtn = document.querySelector(".modal-button-trailer")
+const favoriteModalBtn = document.querySelector(".modal-button-favorite")
+
+const getSingleMovie = async (movieId) => {
+    // const url = `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}`
+    const url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=16d88adebf2cbd3eb12ae86a69e43fc4`
+    const response = await fetch(url)
+    const data = await response.json()
+    console.log(data);
+    const { title, id, original_language, overview, popularity, release_date, vote_average, vote_count, poster_path, original_title, } = data
+
+    const genres_ids = []
+    data.genres.forEach((item) => {
+        genres_ids.push(item.id)
+    })
+
+    // Replacing innerText of elements with newSingleMovieData
+    modalTitle.textContent = title
+    if (poster_path) {
+        modalImage.setAttribute("src", `${IMG_PATH + poster_path}`)
+    } else {
+        modalImage.setAttribute("src", "https://cinemaone.net/images/movie_placeholder.png")
+    }
+    voteSpan.textContent = vote_average;
+    votesSpan.textContent = vote_count;
+    popularitySpan.textContent = popularity;
+    originalTitleSpan.textContent = original_title;
+    releaseDateSpan.textContent = release_date;
+    originalLanguageSpan.textContent = original_language;
+    overviewModal.textContent = overview
+    genresModal.textContent = getGenresForInfo(genres, genres_ids).join(" , ")
+    // console.log(voteSpan.textContent);
+
+
+    // trailerModalBtn.addEventListener("click", openNav(data))
+    trailerModalBtn.addEventListener("click", () => openNav(data))
+    
+    // favoriteModalBtn.addEventListener("click", ()=>{
+    //     favoriteFilms.push(data)
+    //     console.log(favoriteFilms);
+    // })
+
+}
+
+
+
+
+
+// Favorite section
+
+// homeLink.addEventListener("click", ()=>{
+//     showElements()
+//     homeLink.classList.add("links-active-btn")
+//     favoriteLink.classList.remove("links-active-btn")
+// })
+// favoriteLink.addEventListener("click", ()=>{
+//     hideElements()
+//     homeLink.classList.remove("links-active-btn")
+//     favoriteLink.classList.add("links-active-btn")
+// })
+
+// const updateFavoriteSection = () => {
+
+// }
+
+
+// Modal with single movie
+
+var isModalOpen = false
+
+const openModal = (e) => {
+    e.preventDefault();
+    if (e.target.name === "details") {
+        getSingleMovie(e.target.id)
+        modalContainer.classList.add("modal-container-active")
+        isModalOpen = true
+        toTop.style.opacity = 0
+
+    }
+
+}
+const closeModal = (e) => {
+    modalContainer.classList.remove("modal-container-active")
+    isModalOpen = true
+    toTop.style.opacity = 1
+    modalCloseBtn.addEventListener("click", closeModal)
+    window.removeEventListener("keydown", closeModalHandler)
+    // favoriteModalBtn.removeEventListener("click", ()=>{
+    //     favoriteFilms.push(data)
+    //     console.log(favoriteFilms)
+    // })
+
+
+}
+
+const closeModalHandler = (e) => {
+    if (e.code === 'Escape') {
+        closeModal()
+    }
+}
+
+document.addEventListener("click", (e) => {
+    if (e.target.id === "modal-container") {
+        closeModal()
+    }
+})
+
+window.addEventListener("keydown", closeModalHandler)
+main.addEventListener("click", openModal)
+modalCloseBtn.addEventListener("click", closeModal)
+
+
 
 // Get genres in film info
 
@@ -184,11 +325,13 @@ const getGenresForInfo = (genresAll, genresId) => {
             }
         }
     }
-    if (genres.length > 2) {
-        genres.length = 2
-    }
+    // if (genres.length > 2) {
+    //     genres.length = 2
+    // }
 
-    return genres.join(", ")
+    return genres
+    // .join(", ")
+
 }
 
 // Get the id of genres 
@@ -244,7 +387,6 @@ const overlayContent = document.getElementById("overlay-content")
 function openNav(movie) {
     let id = movie.id
     fetch(BASE_URL + "/movie/" + id + "/videos?" + API_KEY).then(res => res.json()).then(videoData => {
-        console.log(videoData);
         if (videoData) {
             document.getElementById("myNav").style.width = "100%";
             if (videoData.results.length > 0) {
@@ -287,6 +429,7 @@ function openNav(movie) {
         }
     })
 }
+
 
 // Show videos
 var activeSlide = 0;
@@ -375,3 +518,25 @@ const toggleNextPage = () => {
 }
 prevBtn.addEventListener("click", togglePrevPage)
 nextBtn.addEventListener("click", toggleNextPage)
+
+
+
+
+
+const hideElements = () => {
+    main.classList.add("main-hidden")
+    tagsEl.classList.add("main-hidden")
+    tagsTitle.classList.add("main-hidden")
+    paginationContainer.classList.add("main-hidden")
+    sectionFavorite.classList.remove("main-hidden")
+    hr.classList.add("main-hidden")
+    
+}
+const showElements = () => {
+    main.classList.remove("main-hidden")
+    tagsEl.classList.remove("main-hidden")
+    tagsTitle.classList.remove("main-hidden")
+    paginationContainer.classList.remove("main-hidden")
+    hr.classList.remove("main-hidden")
+    sectionFavorite.classList.add("main-hidden")
+}

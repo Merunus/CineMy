@@ -478,6 +478,7 @@ footer {
   top: 20px;
   left: 45px;
   font-size: 60px;
+  z-index: 10;
 }
 
 .embed.hide {

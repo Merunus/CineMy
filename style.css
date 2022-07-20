@@ -1,0 +1,826 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+
+
+:root {
+  --rate:#22254b;
+  --primary-color: #EFEFEF;
+  --secondary-color: #373b69;
+}
+
+* {
+  box-sizing: border-box;
+  scroll-behavior:smooth;
+  
+}
+.wrapper {
+  overflow-x: hidden;
+}
+
+
+body {
+  background-color: var(--primary-color);
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+header {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--secondary-color);
+  margin-bottom: 40px;
+}
+.title {
+  z-index: 1;
+  font-size: 30px;
+  color: #FFC300;
+  /* font-family: "Lobster", sans-serif; */
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+.title:hover {
+  transform: scale(1.05)
+}
+
+.title-icon {
+  margin-left: 4px;
+  transition: 0.3s ease;
+}
+.title .title-icon:hover{
+  color: #5d63a9
+}
+.title-second-part {
+  font-family: "Lobster", sans-serif;
+  margin-left: 4px;
+  text-transform: none;
+}
+.search {
+  background-color: transparent;
+  border: 2px solid #22254b;
+  z-index: 1;
+  position: relative;
+  border-radius: 50px;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  color: #fff;
+}
+.search::placeholder {
+  color: #7378c5;
+}
+.search:focus {
+  outline: none;
+  background-color: #22254b;
+}
+
+.links-container {
+  display: flex;
+  align-items: center;
+}
+.links-container a {
+  text-decoration: none;
+  color:#FFC300;
+  text-transform: uppercase;
+  z-index: 1;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+.home-link-btn {
+margin-right: 15px;
+margin-left: 20px;
+}
+.favorites-link-btn {
+  margin-right: 15px;
+}
+.home-link-btn:hover {
+  transform: translateY(-2px);
+  
+}
+.favorites-link-btn:hover {
+  transform: translateY(-2px);
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0% 5%;
+}
+
+.movie {
+  width: 300px;
+  margin: 1rem;
+  background-color: var(--secondary-color);
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+.movie:hover {
+transform: translateY(0);
+}
+
+.movie img {
+  width: 100%;
+}
+
+.movie-info {
+  color: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap:0.2rem;
+  padding: 0.5rem 1rem 0.5rem;
+  letter-spacing: 0.5px;
+  max-height: 120px ;
+}
+
+.movie-info h3 {
+  font-size: 19px;
+  margin-top: 0;
+  margin-bottom: 0;
+  text-align: center;
+  padding-bottom: 0;
+}
+.genres-film {
+  opacity: 1;
+  font-size: 13px;
+  letter-spacing: 2px;
+  font-weight: 400;
+  color: #FFC300;
+  text-align: left;
+}
+.movie-info h4 {
+  margin-top: 0;
+  margin-bottom: 0;
+  /* text-align: center; */
+  font-weight: 400;
+  font-size: 13px;
+  /* color:#7378c5 */
+  color: #fff;
+  opacity: 0.5
+}
+
+
+.movie-info span {
+  background-color: var(--rate);
+  padding: 1.2rem 1.2rem;
+  border-radius: 50%;
+  font-weight: bold;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  
+
+}
+
+.movie-info span.green {
+  color: lightgreen;
+  border: 1px solid lightgreen
+
+}
+
+.movie-info span.orange {
+  color: orange;
+  border: 1px solid orange
+}
+
+.movie-info span.red {
+  color: red;
+  border: 1px solid red;
+}
+
+.overview {
+  background-color: #fff;
+  padding: 2rem;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  max-height: 100%;
+  transform: translateY(101%);
+  overflow-y: auto;
+  transition: transform 0.3s ease-in;
+}
+.overview::-webkit-scrollbar{
+  width: 8px;
+  background-color: grey;
+}
+
+.movie:hover .overview {
+  transform: translateY(0);
+}
+.genres-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 20px;
+  margin-left: 9px;
+}
+.genres-title-span {
+margin-left: 10px;
+font-weight: 900;
+color:#5b8ff9;
+letter-spacing: 2px;
+}
+
+.tags {
+  position: relative;
+z-index: 1;
+width: 80%;
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+align-items: center;
+margin: 25px auto;
+}
+.tag {
+  /* color: #373b69; */
+  color: #fff;
+  padding: 15px 20px;
+  background-color:#7378c5;
+  border-radius: 10px;
+  margin: 5px 5px;
+  display: inline-block;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+.tag:hover {
+  background-color: #22254b;
+  transform: scale(1.05);
+}
+
+.tag.selected {
+  background-color: #22254b;
+}
+.clearBtn {
+  background-color: #FFC300;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  font-size: 32px;
+  padding: 10px 15px;
+  
+}
+
+
+
+footer {
+  width: 100%;
+  padding: 1rem;
+  background-color:#7378c5;
+  margin-top: 40px;
+  position: relative;
+  
+}
+.invisible {
+  opacity: 0;
+}
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+
+.footer-container p {
+  opacity: 0.7;
+  font-family: "Roboto",sans-serif;
+  font-size: 14px;
+}
+.footer-container ul {
+ margin-right: 50px;
+}
+.footer-container ul li {
+  display: inline-block;
+  transition: 0.5s ease;
+ 
+}
+.footer-container ul li a{
+  font-size: 20px;
+  border-radius: 50%;
+  margin: 0 5px;
+  color:#22254b ;
+  margin-right: 10px;
+  transition: 0.4s ease;
+}
+.footer-container ul li:hover {
+  transform: scale(1.4);
+  
+}
+.footer-container ul li a:hover{
+  color:#EFEFEF
+}
+
+.hr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1624px;
+  /* width: 80%; */
+  color:#22254b;
+  /* margin: 25px auto; */
+
+}
+.to-top {
+  z-index: 1;
+  background:#fff;
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  text-decoration: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s ease;
+}
+.to-top.active {
+  bottom: 32px;
+  pointer-events: all;
+  opacity: 1;
+}
+.to-top:hover {
+  transform: scale(1.3);
+}
+
+.pagination {
+  position: relative;
+  display: flex;
+  margin: 10px 30px;
+  justify-content: center;
+  align-items: center;
+  color: #22254b
+}
+.page {
+  padding: 20px;
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+  font-size: 1em;
+  font-family: inherit;
+}
+.page:active {
+  transform: scale(0.95);
+}
+
+.disabled-page {
+  opacity: 0.5;
+}
+.current {
+  padding: 12px 22px;
+  border-radius: 50%;
+  border: 5px solid #5b8ff9;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.movie-buttons-container {
+  display: flex;
+  align-items: center;
+}
+
+
+
+.trailer-btn {
+  background-color :#373b69;
+  color:#fff;
+  font-size: 15px;
+  font-weight: 400;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 0;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  max-height: 45px;
+  display: flex;
+  align-items: center;
+}
+.trailer-btn:active {
+  transform: scale(0.95);
+  
+}
+
+
+
+
+/* <------------------Trailer-slider----------------------------->*/
+
+.overlay {
+  /* Height & width depends on how you want to reveal the overlay (see JS below) */   
+  
+  height: 100%;
+  width: 0;
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Sit on top */
+  left: 0;
+  top: 0;
+  background-color: rgb(0,0,0); /* Black fallback color */
+  background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+}
+
+/* Position the content inside the overlay */
+.overlay-content {
+  position: relative;
+  top: 5%; /* 25% from the top */
+  width: 100%; /* 100% width */
+  text-align: center; /* Centered text/links */
+  margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+}
+
+/* The navigation links inside the overlay */
+.overlay a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 36px;
+  color: #818181;
+  display: block; /* Display block instead of inline */
+  transition: 0.3s; /* Transition effects on hover (color) */
+}
+
+/* When you mouse over the navigation links, change their color */
+.overlay a:hover, .overlay a:focus {
+  color: #f1f1f1;
+}
+
+/* Position the close button (top right corner) */
+.overlay .closebtn {
+  position: absolute;
+  top: 20px;
+  left: 45px;
+  font-size: 60px;
+}
+
+.embed.hide {
+  display: none;
+}
+.embed.show {
+  display: inline-block;
+}
+.arrow {
+  position: absolute;
+
+}
+.arrow.left-arrow {
+  left: 5%;
+  font-size: 60px;
+}
+.arrow.right-arrow {
+  right: 5%;
+  font-size: 60px;
+
+} 
+.dots {
+  margin-top: 20px;
+ 
+}
+.dots .dot {
+  padding: 5px 10px;
+  border-radius: 50%;
+  border: 5px solid rgb(91, 143, 249, 0.3);
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  margin: 0 6px;
+ 
+}
+.dots .dot.active {
+  border-color: #eee;
+}
+
+
+
+
+
+
+
+/* Modal  */
+
+.modal-container-active {
+  opacity: 1 !important;
+  z-index: 1 !important;
+}
+.modal-container {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: auto;
+  background: rgba(0,0,0,.8);
+  opacity: 0;
+  /* transition: opacity .2s ease; */
+  z-index: 0;
+  will-change: opacity;
+}
+.modal {
+  background-color: #fff;
+  padding: 42px 30px 40px;
+  border-radius: 3px;
+
+}
+.modal-template {
+  display: flex;
+  font-family: "Roboto", sans-serif;
+  /* justify-content: space-between; */
+  /* width: 834px; */
+}
+
+.modal-image {
+  height: 550px;
+}
+.modal-details {
+  margin-left: 15px;
+}
+.modal-details h1 {
+  font-size: 1.9em;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  max-width: 400px;
+}
+.modal-details p{
+  color: rgb(64, 64, 64);
+  font-size: 0.8em;
+}
+
+.modal-details-item {
+  display: flex;
+}
+.modal-details-item-span-vote {
+  margin-left: 53px;
+  margin-right: 10px;
+  background-color: #373b69;
+  color: #fff;
+  padding: 0 10px;
+  border-radius: 3px;
+  font-size: 1.2em;
+
+}
+.modal-details-item-span-votes {
+  margin-left: 10px;
+  font-size: 1.2em;
+  color: #000;
+
+}
+.modal-details-item-span-popularity {
+  margin-left: 75px;
+  font-weight: 600;
+  font-size: 1.2em;
+  color: #000;
+
+}
+.modal-details-item-span-original-title {
+  margin-left: 55px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 1.2em;
+  color: #000;
+  max-width: 150px;
+
+}
+.modal-details-item-span-release-date {
+  margin-left: 50px;
+  font-size: 1.2em; 
+  color: #000;
+
+}
+.modal-details-item-span-original-language {
+  margin-left: 25px;
+  font-size: 1.2em; 
+  color: #000;
+  text-transform: uppercase;
+}
+.modal-genres-span-one {
+  margin-left: 80px;
+  font-size: 1.2em;
+  color: #000;
+  font-weight: 700;
+
+}
+.modal-genres-span-two {
+font-size: 1.2em;
+font-weight: 500;
+color: #000;
+font-weight: 700;
+}
+
+.modal-description-container {
+  margin-top: 40px;
+  max-width: 400px;
+}
+.modal-description-container h2 {
+  text-transform: uppercase;
+  font-size: 1.2em;
+}
+.modal-description-container p {
+  letter-spacing: 1px;
+  line-height: 20px;
+}
+
+.modal-buttons-container {
+display: flex;
+align-items: center;
+margin-top: 30px;
+}
+.modal-button-trailer {
+  padding: 10px 15px;
+  border: 1px solid #22254b;
+  /* background: #22254b; */
+  background: #fff;
+  color: #000;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 15px;
+  transition: 0.3s all ease;
+  font-size: 0.9em;
+
+}
+.modal-button-trailer:hover {
+  background: #22254b;
+color: #fff;
+box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+}
+.modal-button-favorite {
+  padding: 10px 15px;
+  border: 1px solid #22254b;
+  /* background: #22254b; */
+  background: #fff;
+  color: #000;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 15px;
+  transition: 0.3s all ease;
+  font-size: 0.9em;
+}
+.modal-button-favorite:hover {
+  background: #5b8ff9;
+  color: #fff;
+  border: 1px solid #5b8ff9;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.modal-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border: none;
+  border-radius: 50%;
+  text-align: center;
+  color: #000;
+  font-size: 20px;
+  background-color: #fff;
+  z-index: 1000;
+}
+
+.links-active-btn {
+  /* color:#5d63a9 !important */
+  border-bottom: 2px solid #FFC300;
+}
+.main-active {
+  display: auto;
+}
+.main-hidden {
+  display: none !important;
+}
+.section-favorite-active {
+  display: auto;
+}
+/* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+
+
+
+
+
+/* Favorite Section */
+
+.favorite-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+
+
+
+
+
+
+
+
+
+@media(max-width:500px) {
+  
+  header {
+    flex-direction: column;
+  }
+
+
+  header a {
+    margin-bottom: 0.5em;
+  }
+  .links-container {
+    margin-top: 30px;
+  }
+  .footer-container {
+    flex-direction: column;
+  }
+  .overlay-content {
+    text-align: left;
+    
+  }
+  .overlay-content h1 {
+   text-align: center;
+  }
+  .overlay .closebtn {
+    top: 0;
+    left: 10px;
+  }
+  
+iframe {
+  width: 412px;
+  height: 350px;
+}
+.dots {
+  /* margin-left: 70px; */
+  text-align: center;
+}
+.arrow.left-arrow {
+  top: 80%;
+  left: 25%;
+}
+.arrow.right-arrow {
+  left: 60%;
+  top: 80%;
+}
+.footer-container p {
+  font-size: 10px;
+}
+.footer-container ul {
+  margin-right: 0;
+}
+.to-top.active {
+  bottom: 25px;
+}
+
+
+.modal-template {
+  margin-top: 50px;
+  flex-direction: column;
+}
+.modal-image {
+  height: 380px;
+  width: 75%;
+  margin-left: 40px;
+  margin-top: 70%;
+}
+}
+@media screen and (max-height: 450px) {
+  .overlay a {font-size: 20px}
+  .overlay .closebtn {
+    font-size: 40px;
+    top: 30px;
+    left: 60px;
+    color: #fff;
+    text-align: center;
+  }
+}
